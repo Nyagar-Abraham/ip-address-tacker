@@ -1,9 +1,9 @@
 'use client';
 
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L, { DivIcon } from 'leaflet';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 // Define custom icon inside the client component
 const createCustomIcon = (): DivIcon => {
@@ -26,6 +26,14 @@ interface MyMapClientComponentProps {
 	place: string;
 }
 
+const ChangeView: FC<{ position: [number, number] }> = ({ position }) => {
+	const map = useMap();
+	useEffect(() => {
+		map.setView(position);
+	}, [position, map]);
+	return null;
+};
+
 const Map: FC<MyMapClientComponentProps> = ({ position, place }) => {
 	return (
 		<MapContainer
@@ -34,6 +42,7 @@ const Map: FC<MyMapClientComponentProps> = ({ position, place }) => {
 			className="h-screen w-full"
 			scrollWheelZoom={false}
 		>
+			<ChangeView position={position} />
 			<TileLayer
 				attribution='&copy; <a href="https://www.openstreetmap.fr/hot/copyright">OpenStreetMap</a> contributors'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
